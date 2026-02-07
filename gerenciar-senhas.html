@@ -79,7 +79,6 @@
             display: block;
         }
         
-        /* Perfil do aluno */
         .perfil-header {
             display: flex;
             gap: 2rem;
@@ -137,7 +136,6 @@
             color: #991b1b;
         }
         
-        /* Formulário de edição */
         .form-section {
             margin-bottom: 2rem;
         }
@@ -180,7 +178,6 @@
             grid-column: 1 / -1;
         }
         
-        /* Senha */
         .senha-box {
             background: #fef3c7;
             border: 2px solid #f59e0b;
@@ -199,7 +196,6 @@
             color: #1A1A22;
         }
         
-        /* Botões de ação */
         .acoes {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -266,7 +262,6 @@
             background: #4b5563;
         }
         
-        /* Responsivo */
         @media (max-width: 768px) {
             .perfil-header {
                 flex-direction: column;
@@ -306,7 +301,6 @@
         </div>
 
         <div id="resultado">
-            <!-- Perfil do aluno -->
             <div class="perfil-header">
                 <div class="foto-section">
                     <img id="fotoPreview" class="foto-preview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto do aluno">
@@ -382,7 +376,6 @@
                     </div>
                 </div>
 
-                <!-- Botões de ação -->
                 <div class="acoes">
                     <button type="submit" class="btn btn-salvar">
                         💾 Salvar Alterações
@@ -423,7 +416,6 @@
         let fotoBase64 = null;
         const auth = getAuth();
 
-        // Carregar turmas ao iniciar
         async function carregarTurmas() {
             try {
                 const result = await buscarTurmas({ ativa: true });
@@ -439,7 +431,6 @@
         }
         carregarTurmas();
 
-        // Buscar aluno
         window.buscarAluno = async function() {
             const email = document.getElementById('emailBusca').value.trim().toLowerCase();
             
@@ -472,7 +463,6 @@
                 const alunoDoc = snapshot.docs[0];
                 alunoAtual = { id: alunoDoc.id, ...alunoDoc.data() };
 
-                // Preencher formulário
                 preencherFormulario(alunoAtual);
 
                 loading.classList.remove('show');
@@ -485,7 +475,6 @@
             }
         };
 
-        // Preencher formulário com dados do aluno
         function preencherFormulario(aluno) {
             document.getElementById('alunoNomeDisplay').textContent = aluno.nome;
             document.getElementById('alunoEmailDisplay').textContent = aluno.email;
@@ -502,12 +491,10 @@
             
             document.getElementById('senhaAtual').textContent = aluno.senhaTemporaria || '(não registrada)';
             
-            // Foto
             const fotoUrl = aluno.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
             document.getElementById('fotoPreview').src = fotoUrl;
             fotoBase64 = aluno.foto;
             
-            // Status
             const badge = document.getElementById('statusBadge');
             const btnStatus = document.getElementById('btnStatus');
             
@@ -524,7 +511,6 @@
             }
         }
 
-        // Handle foto change
         window.handleFotoChange = function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -547,7 +533,6 @@
             reader.readAsDataURL(file);
         };
 
-        // Salvar alterações
         window.salvarAlteracoes = async function(event) {
             event.preventDefault();
             
@@ -571,17 +556,14 @@
                     foto: fotoBase64
                 };
 
-                // Atualizar no Firestore
                 await updateDoc(doc(db, "usuarios", alunoAtual.id), updates);
 
-                // Se email mudou, atualizar no Authentication também
                 if (emailNovo !== emailAntigo) {
                     alert('⚠️ Email alterado!\n\nO aluno precisará usar o novo email para login.\n\nConsidere enviar um email de reset de senha.');
                 }
 
                 alert('✅ Alterações salvas com sucesso!');
                 
-                // Atualizar display
                 alunoAtual = { ...alunoAtual, ...updates };
                 preencherFormulario(alunoAtual);
 
@@ -591,7 +573,6 @@
             }
         };
 
-        // Resetar senha
         window.resetarSenha = async function() {
             if (!alunoAtual) return;
 
@@ -606,7 +587,6 @@
             }
         };
 
-        // Copiar credenciais
         window.copiarCredenciais = function() {
             if (!alunoAtual) return;
 
@@ -617,7 +597,6 @@
                 .catch(() => alert('❌ Erro ao copiar'));
         };
 
-        // Toggle status (ativar/desativar)
         window.toggleStatus = async function() {
             if (!alunoAtual) return;
 
