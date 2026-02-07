@@ -43,6 +43,12 @@ async function carregarTurmas() {
       return;
     }
 
+turmasCache.sort((a, b) => {
+  const nomeA = (a.nomeExibicao || a.nome || '').toLowerCase();
+  const nomeB = (b.nomeExibicao || b.nome || '').toLowerCase();
+  return nomeA.localeCompare(nomeB);
+});
+
     // Popular o select
     let options = '<option value="">Todas as turmas</option>';
     turmasCache.forEach(turma => {
@@ -134,6 +140,12 @@ function renderizarAlunos(alunos, termoBusca = "") {
     `;
     return;
   }
+
+alunos.sort((a, b) => {
+  const nomeA = (a.nomeExibicao || a.nome || '').toLowerCase();
+  const nomeB = (b.nomeExibicao || b.nome || '').toLowerCase();
+  return nomeA.localeCompare(nomeB);
+});
 
   alunos.forEach(aluno => {
     const bloco = document.createElement("div");
